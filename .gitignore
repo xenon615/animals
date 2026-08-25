@@ -1,0 +1,12 @@
+
+debug/
+target/
+public/media/images
+saved_queris/
+db/
+
+Cargo.lock
+**/*.rs.bk
+Cargo.lock
+notes.md
+end2end/

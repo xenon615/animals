@@ -3,7 +3,7 @@
 Small project as a notes for myself  how to bundle together rust, leptos and sqlx.
 I leaved this public. May be it will be useful for somebody.
 ## Actually
-.. this projest has no real benefit or meaning yet but for those who seek the truth i can explain.
+.. this projest has no real benefit or meaning yet but for those who seek the truth i can explain.  
     or
 .. this all about a dude who used to be wordpress developer for a decades and desided to get out from comfort zone.
 ## What i have at the moment

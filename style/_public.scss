@@ -1,0 +1,125 @@
+
+a {
+    color: wheat;
+    text-decoration: none;
+}
+a:visited {
+    color: inherit;
+}
+
+a.stretched-link::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    content: "";
+}
+
+.header {
+    min-height: 60px;
+    display: flex;
+    & .side {
+        color: yellow;
+        flex-basis: 25%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    & .middle {
+        flex-basis: 50%;
+        display: flex;
+        align-items: stretch;
+    }
+}
+
+.middle .menu {
+    flex: 1;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    & a:hover {
+        text-decoration: underline;
+    }
+}
+.container {
+    background-color: rgba(0.9, 1, 1, 0.9);
+    margin: 0px 5%;
+    height: 100vh;
+}
+
+.page-title {
+    text-align: center;
+}
+.list-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    & .tile  {
+        position: relative;
+        text-shadow: 0 0 4px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.6);
+        border-radius: 10px;
+        padding: 5px;
+        height: 200px;
+        flex: 0 0 200px;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-color: rgba(0, 1, 0, 0.4);
+        background-blend-mode: darken;
+        transition: background-color 0.9s ease;
+        display: flex;
+        justify-content: center;
+        align-items: end;
+        &.clickable{
+            cursor: pointer;
+        }
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.2);
+            transition: background-color 0.9s ease;
+        }
+
+    }
+
+}
+
+.subtitle {
+    text-align: center;
+    & .back {
+        margin: 10px 0;
+        & a {
+            cursor: pointer;
+        }
+    }
+
+}
+
+.creature-container {
+    padding: 20px;
+    & .name {
+      font-size: 28px;
+      margin-bottom: 30px;
+    }
+
+    & .scientific-name {
+      font-style: italic;
+    }
+    & .gallery {
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        & img {
+            width: 240px;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+
+        }
+    }
+
+}
+
+a {
+    color: wheat;
+}

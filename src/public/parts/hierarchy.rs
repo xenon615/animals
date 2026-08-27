@@ -1,8 +1,11 @@
 
-use leptos::{leptos_dom::logging::console_log, prelude::*};
+use leptos::{
+    // leptos_dom::logging::console_log,
+    prelude::*
+};
 use serde::{Deserialize, Serialize};
 use crate::backend::{get_hierarchy,  Term};
-use leptos_router::components::A;
+
 
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
 struct Parent {

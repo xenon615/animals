@@ -5,15 +5,15 @@ use leptos:: {
 
 use leptos_meta::{provide_meta_context, MetaTags, Stylesheet, Title};
 use leptos_router::{
-    StaticSegment, components::{A, Route, Router, Routes}, hooks::{use_params_map}, path,
+    StaticSegment, components::{Route, Router, Routes, ParentRoute}, path, nested_router::Outlet
 };
 
 use crate::{
-    parts::{
-        header::*, hierarchy::Hierarchy, page::Page,animals::{Animals,Animal}
+    admin::dashboard::DashBoard,
+    public:: parts::{
+        animals::{Animal, Animals}, header::*, hierarchy::Hierarchy, page::Page
     }
 };
-
 
 pub fn shell(options: LeptosOptions) -> impl IntoView {
     view! {
@@ -26,9 +26,7 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
                 <HydrationScripts options islands=true/>
                 <MetaTags/>
             </head>
-            <body>
-                <App/>
-            </body>
+            <App/>
         </html>
     }
 }
@@ -37,29 +35,54 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
 
 #[component]
 pub fn App() -> impl IntoView {
-    // logging::log!("where do I run?");
     provide_meta_context();
     view! {
-        <Stylesheet id="leptos" href="/pkg/animals.css"/>
-        <Title text="Animals"/>
-
+        <Stylesheet id="animals" href="/pkg/animals.css"/>
         <Router>
-            <Header/>
-            <main>
-                <div class="container">
-                    <Routes fallback=|| "Page not found.".into_view()>
-                        <Route path=StaticSegment("/hierarchy") view=Hierarchy/>
-                        <Route path=StaticSegment("/animals") view=Animals/>
-                        <Route path=path!("/animals/:slug") view=Animal/>
-                        <Route path=path!("/animals/genus/:slug") view=Animals/>
-                        <Route path=StaticSegment("") view=Page/>
-                        <Route path=path!("/:slug") view=Page/>
-                    </Routes>
-                </div>
-            </main>
+            <Routes fallback= | | "Page not found.".into_view()>
+                <ParentRoute path = StaticSegment("/admin") view = AdminLayout>
+                    <Route  path = StaticSegment("") view = DashBoard/>
+                </ParentRoute>
+                <ParentRoute path = StaticSegment("") view = PublicLayout>
+                    <Route path=StaticSegment("") view=Page/>
+                    <Route path=StaticSegment("/hierarchy") view=Hierarchy/>
+                    <Route path=StaticSegment("/animals") view=Animals/>
+                    <Route path=path!("/animals/:slug") view=Animal/>
+                    <Route path=path!("/animals/genus/:slug") view=Animals/>
+                    <Route path=path!("/:slug") view=Page/>
+                </ParentRoute>
+            </Routes>
         </Router>
-
     }
 }
 
 // ---
+
+#[component]
+fn AdminLayout() -> impl IntoView {
+    view! {
+        <Title text="Animals Admin"/>
+        <body class="admin-layout">
+            <main>
+                <Outlet/>
+            </main>
+        </body>
+    }
+}
+
+// ---
+
+#[component]
+fn PublicLayout() -> impl IntoView {
+    view! {
+        <Title text="Animals"/>
+        <body class="public-layout">
+            <main>
+                <Header/>
+                <div class="container">
+                    <Outlet/>
+                </div>
+            </main>
+        </body>
+    }
+}

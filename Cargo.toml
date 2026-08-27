@@ -17,6 +17,10 @@ tokio = { version = "1.53.1", optional = true, features = [ "rt-multi-thread" ] 
 wasm-bindgen = { version = "0.2.127", optional = true}
 serde = { version = "1.0.229", features= ["derive"] }
 sqlx = { version = "0.9.0" , features= ["postgres", "runtime-tokio", "tls-rustls", "macros"], optional=true}
+axum-login = "0.18.0"
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.23", features = ["env-filter"] }
+
 
 
 [features]

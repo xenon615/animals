@@ -14,30 +14,29 @@ async fn main() {
     use leptos::prelude::*;
     use leptos_axum::{generate_route_list, LeptosRoutes};
     use animals::app::*;
+    use tracing_subscriber::{
+        layer::SubscriberExt,
+        util::SubscriberInitExt,
+        filter::EnvFilter
+    };
+
+
+    // tracing_subscriber::registry()
+    //     .with(EnvFilter::new(std::env::var("RUST_LOG").unwrap_or_else(
+    //         |_| "axum_login=debug,tower_sessions=debug,sqlx=warn,tower_http=debug".into(),
+    //     )))
+    //     .with(tracing_subscriber::fmt::layer())
+    //     .init();
 
     let conf = get_configuration(None).unwrap();
-    // dbg!(&conf);
+
     let addr = conf.leptos_options.site_addr;
     let routes = generate_route_list(App);
-    // dbg!(&routes);
 
-
-
-    // let app = Router::new()
-    //     .leptos_routes(
-    //         &conf.leptos_options,
-    //         routes,
-    //         {
-    //             let leptos_options = conf.leptos_options.clone();
-    //             move || shell(leptos_options.clone())
-    //         }
-    //     )
-    //     .fallback(leptos_axum::file_and_error_handler(shell))
-    //     .with_state(conf.leptos_options)
-    // ;
-
-    // let pool = sqlx::SqlitePool::connect("sqlite:db/db.sqlite3").await.unwrap();
     let pool = sqlx::PgPool::connect("postgres://dbuser:dbpass@localhost:5432/animals").await.unwrap();
+
+
+
 
     let app = Router::new()
         .leptos_routes_with_context(
@@ -54,8 +53,6 @@ async fn main() {
 
     ;
 
-    // run our app with hyper
-    // `axum::Server` is a re-export of `hyper::Server`
     log!("listening on http://{}", &addr);
     let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();
     axum::serve(listener, app.into_make_service())

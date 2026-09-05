@@ -1,5 +1,5 @@
 use leptos::prelude::*;
-
+// use crate::auth_backend::UserBaseError;
 #[cfg_attr(feature = "ssr", derive(sqlx::FromRow))]
 #[derive(serde::Deserialize, serde::Serialize, Clone)]
 pub struct CreatureBrief {
@@ -158,4 +158,42 @@ pub async  fn get_page(slug: String) -> Result<Page, ServerFnError> {
             Err(e) => Err(ServerFnError::ServerError(e.to_string()))
         }
     }
+}
+
+// ---
+
+#[server]
+pub async fn get_current_user() ->  Result<bool, ServerFnError> {
+    let auth_session: axum_login::AuthSession<crate::auth_backend::UsersBase> = leptos_axum::extract().await?;
+    Ok(auth_session.user.is_some())
+    // Ok(true)
+}
+
+#[server]
+pub async fn create_user(username : String, password: String ) ->  Result<bool, ServerFnError> {
+    let auth_session: axum_login::AuthSession<crate::auth_backend::UsersBase> = leptos_axum::extract().await?;
+    let _create_result = auth_session.backend.create_user(username, password).await;
+    Ok(true)
+}
+
+// ---
+
+#[server]
+pub async fn login(username : String, password: String ) ->  Result<(), ServerFnError> {
+    let mut auth_session: axum_login::AuthSession<crate::auth_backend::UsersBase> = leptos_axum::extract().await?;
+    let credentials = (username, password);
+      if let Some(user) = auth_session.authenticate(credentials).await.map_err(|e| ServerFnError::new(e.to_string()))? {
+            auth_session.login(&user).await.map_err(|e| ServerFnError::new(e.to_string()))?;
+          Ok(())
+      } else {
+          Err(ServerFnError::new("Unexpected Error"))
+      }
+}
+
+// ---
+#[server]
+pub async fn logout() ->  Result<(), ServerFnError> {
+    let mut auth_session: axum_login::AuthSession<crate::auth_backend::UsersBase> = leptos_axum::extract().await?;
+    auth_session.logout().await.map_err(|e| ServerFnError::new(e.to_string()))?;
+    Ok(())
 }

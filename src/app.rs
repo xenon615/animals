@@ -3,16 +3,27 @@ use leptos:: {
     // logging
 };
 
-use leptos_meta::{provide_meta_context, MetaTags, Stylesheet, Title};
+use leptos_meta::{provide_meta_context, MetaTags, Stylesheet};
 use leptos_router::{
-    StaticSegment, components::{Route, Router, Routes, ParentRoute}, path, nested_router::Outlet
+    Lazy,
+    StaticSegment, components::{Route, Router, Routes, ParentRoute}, path
 };
 
 use crate::{
-    admin::dashboard::DashBoard,
-    public:: parts::{
-        animals::{Animal, Animals}, header::*, hierarchy::Hierarchy, page::Page
-    }
+    admin::{
+        dashboard::DashBoard,
+        layout::{
+            AdminLayoutRoute,
+            // Layout as AdminLayout
+        }
+    }, public::{
+        layout::Layout as PublicLayout,
+        parts::{
+            animals::{Animal, Animals}, hierarchy::Hierarchy, page::Page
+        }
+    },
+
+
 };
 
 pub fn shell(options: LeptosOptions) -> impl IntoView {
@@ -40,7 +51,9 @@ pub fn App() -> impl IntoView {
         <Stylesheet id="animals" href="/pkg/animals.css"/>
         <Router>
             <Routes fallback= | | "Page not found.".into_view()>
-                <ParentRoute path = StaticSegment("/admin") view = AdminLayout>
+                // <ParentRoute path = StaticSegment("/admin") view = AdminLayout>
+                <ParentRoute path = StaticSegment("/admin") view = {Lazy::<AdminLayoutRoute>::new()}>
+                    // <Route  path = StaticSegment("") view = DashBoard/>
                     <Route  path = StaticSegment("") view = DashBoard/>
                 </ParentRoute>
                 <ParentRoute path = StaticSegment("") view = PublicLayout>
@@ -53,36 +66,5 @@ pub fn App() -> impl IntoView {
                 </ParentRoute>
             </Routes>
         </Router>
-    }
-}
-
-// ---
-
-#[component]
-fn AdminLayout() -> impl IntoView {
-    view! {
-        <Title text="Animals Admin"/>
-        <body class="admin-layout">
-            <main>
-                <Outlet/>
-            </main>
-        </body>
-    }
-}
-
-// ---
-
-#[component]
-fn PublicLayout() -> impl IntoView {
-    view! {
-        <Title text="Animals"/>
-        <body class="public-layout">
-            <main>
-                <Header/>
-                <div class="container">
-                    <Outlet/>
-                </div>
-            </main>
-        </body>
     }
 }

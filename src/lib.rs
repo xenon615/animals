@@ -2,6 +2,7 @@ pub mod app;
 pub mod backend;
 pub mod public;
 pub mod admin;
+pub mod auth_backend;
 
 #[cfg(feature = "hydrate")]
 #[wasm_bindgen::prelude::wasm_bindgen]

@@ -1,29 +1,25 @@
-use leptos:: {
+use leptos::{
     prelude::*,
     // logging
 };
 
-use leptos_meta::{provide_meta_context, MetaTags, Stylesheet};
+use leptos_meta::{MetaTags, Stylesheet, provide_meta_context};
 use leptos_router::{
-    Lazy,
-    StaticSegment, components::{Route, Router, Routes, ParentRoute}, path
+    Lazy, StaticSegment,
+    components::{ParentRoute, Route, Router, Routes},
+    path,
 };
 
 use crate::{
-    admin::{
-        dashboard::DashBoard,
-        layout::{
-            AdminLayoutRoute,
-            // Layout as AdminLayout
-        }
-    }, public::{
+    admin::AdminRoutes,
+    public::{
         layout::Layout as PublicLayout,
         parts::{
-            animals::{Animal, Animals}, hierarchy::Hierarchy, page::Page
-        }
+            animals::{Animal, Animals},
+            hierarchy::Hierarchy,
+            page::Page,
+        },
     },
-
-
 };
 
 pub fn shell(options: LeptosOptions) -> impl IntoView {
@@ -51,11 +47,7 @@ pub fn App() -> impl IntoView {
         <Stylesheet id="animals" href="/pkg/animals.css"/>
         <Router>
             <Routes fallback= | | "Page not found.".into_view()>
-                // <ParentRoute path = StaticSegment("/admin") view = AdminLayout>
-                <ParentRoute path = StaticSegment("/admin") view = {Lazy::<AdminLayoutRoute>::new()}>
-                    // <Route  path = StaticSegment("") view = DashBoard/>
-                    <Route  path = StaticSegment("") view = DashBoard/>
-                </ParentRoute>
+                <AdminRoutes/>
                 <ParentRoute path = StaticSegment("") view = PublicLayout>
                     <Route path=StaticSegment("") view=Page/>
                     <Route path=StaticSegment("/hierarchy") view=Hierarchy/>

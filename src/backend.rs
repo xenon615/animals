@@ -166,7 +166,6 @@ pub async  fn get_page(slug: String) -> Result<Page, ServerFnError> {
 pub async fn get_current_user() ->  Result<bool, ServerFnError> {
     let auth_session: axum_login::AuthSession<crate::auth_backend::UsersBase> = leptos_axum::extract().await?;
     Ok(auth_session.user.is_some())
-    // Ok(true)
 }
 
 #[server]

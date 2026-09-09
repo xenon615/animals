@@ -5,6 +5,8 @@ async fn main() {
     use leptos::logging::log;
     use leptos::prelude::*;
     use leptos_axum::{generate_route_list, LeptosRoutes};
+    // use tower_http::normalize_path::NormalizePathLayer;
+
 
     // use tower_sessions_sqlx_store::{PostgresStore, sqlx::PgPool, sqlx};
     use tower_sessions_sqlx_store::{PostgresStore, sqlx::PgPool, sqlx};
@@ -59,6 +61,7 @@ async fn main() {
         .layer(auth_layer)
 
     ;
+    // let app = NormalizePathLayer::trim_trailing_slash().layer(app);
 
     log!("listening on http://{}", &addr);
     let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();

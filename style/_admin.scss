@@ -23,9 +23,19 @@ $border-color: wheat;
 
 & .sidebar {
     grid-area: sidebar;
-    // background-color: yellow;
     box-sizing: border-box;
+    & .entities {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: start;
+        justify-content: start;
+        & a {
+            color: $border-color
+        }
+    }
 }
+
 & .content {
     grid-area: content;
     // background-color: blueviolet;

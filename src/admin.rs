@@ -11,7 +11,7 @@ use leptos_router::{
 };
 
 use self::entities::{dashboard::DashBoardRoute, users::UsersRoute};
-use crate::backend::{Login, get_current_user};
+use crate::{admin::entities::{creatures::CreaturesRoute, dummy::DummyRoute}, backend::{Login, get_current_user}};
 use layout::AdminLayout;
 
 #[component(transparent)]
@@ -20,6 +20,8 @@ pub fn AdminRoutes() -> impl MatchNestedRoutes + Clone {
         <ParentRoute path = StaticSegment("/admin") view = {Lazy::<AdminRoute>::new()}>
             <Route path= StaticSegment("") view ={Lazy::<DashBoardRoute>::new()} />
             <Route path= StaticSegment("/users") view = {Lazy::<UsersRoute>::new()} />
+            <Route path= StaticSegment("/creatures") view = {Lazy::<CreaturesRoute>::new()} />
+            <Route path= StaticSegment("/dummy") view = {Lazy::<DummyRoute>::new()} />
         </ParentRoute>
     }
     .into_inner()

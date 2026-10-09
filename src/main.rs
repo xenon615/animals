@@ -5,11 +5,7 @@ async fn main() {
     use leptos::logging::log;
     use leptos::prelude::*;
     use leptos_axum::{generate_route_list, LeptosRoutes};
-    // use tower_http::normalize_path::NormalizePathLayer;
-
-
-    // use tower_sessions_sqlx_store::{PostgresStore, sqlx::PgPool, sqlx};
-    use tower_sessions_sqlx_store::{PostgresStore, sqlx::PgPool, sqlx};
+    use tower_sessions_sqlx_store::{PostgresStore, sqlx::PgPool};
     use tracing_subscriber::{
         layer::SubscriberExt,
         util::SubscriberInitExt,
@@ -21,8 +17,6 @@ async fn main() {
     };
     use animals::app::*;
     use animals::auth_backend::UsersBase;
-
-
 
     tracing_subscriber::registry()
         .with(EnvFilter::new(std::env::var("RUST_LOG").unwrap_or_else(
@@ -45,7 +39,6 @@ async fn main() {
     let auth_layer = AuthManagerLayerBuilder::new(UsersBase(pool.clone()), session_layer.clone()).build();
 
     let app = Router::new()
-        // .route("/admin", get(leptos_axum::handle_server_fns))
         .leptos_routes_with_context(
             &conf.leptos_options,
             routes,
@@ -57,12 +50,8 @@ async fn main() {
         )
         .fallback(leptos_axum::file_and_error_handler(shell))
         .with_state(conf.leptos_options)
-        // .layer(session_layer)
         .layer(auth_layer)
-
     ;
-    // let app = NormalizePathLayer::trim_trailing_slash().layer(app);
-
     log!("listening on http://{}", &addr);
     let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();
     axum::serve(listener, app.into_make_service())

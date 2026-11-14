@@ -2,7 +2,6 @@ debug/
 target/
 public/media/images
 saved_queris/
-db/
 .zed/
 Cargo.lock
 **/*.rs.bk

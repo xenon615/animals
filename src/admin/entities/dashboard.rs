@@ -11,8 +11,16 @@ impl LazyRoute for DashBoardRoute {
     }
     fn view(this: Self) -> AnyView {
         view! {
-            "Lazy Dashboard"
+            <DashBoard/>
         }
         .into_any()
+    }
+}
+
+
+#[island]
+fn DashBoard() -> impl IntoView {
+    view! {
+        "Lazy Dashboard"
     }
 }

@@ -20,7 +20,7 @@ async fn main() {
 
     tracing_subscriber::registry()
         .with(EnvFilter::new(std::env::var("RUST_LOG").unwrap_or_else(
-            |_| "axum_login=debug,tower_sessions=debug,sqlx=warn,tower_http=debug".into(),
+            |_| "axum_login=debug,tower_sessions=debug,sqlx=warn,tower_http=error".into(),
         )))
         .with(tracing_subscriber::fmt::layer())
         .init();

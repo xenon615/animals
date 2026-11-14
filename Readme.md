@@ -7,7 +7,7 @@ I leaved this public. May be it will be useful for somebody.
     or  
 .. this all about a dude who used to be wordpress developer for a decades and desided to get out from comfort zone.
 ## What i have at the moment
-1) Postgrees DB which  includes  table with animals hierarchical taxonomy and actually table of animal creatures and table with images , that  connected to animals table.
+1) Postgrees DB which includes  table with animals hierarchical taxonomy and actually table of animal creatures and table with images , that  connected to animals table.
 2) Site made with Leptos that used data from mentioned database.
 3) It's all at the moment.
 

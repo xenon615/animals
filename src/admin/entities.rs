@@ -2,8 +2,8 @@ pub mod dashboard;
 pub mod users;
 pub mod creatures;
 pub mod dummy;
-
 use leptos::prelude::*;
+
 #[derive(Debug, serde::Serialize, serde::Deserialize)]
 pub struct Entity {
     pub slug: String,

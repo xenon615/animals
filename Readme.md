@@ -10,5 +10,5 @@ I leaved this public. May be it will be useful for somebody.
 1) Postgrees DB which includes  table with animals hierarchical taxonomy and actually table of animal creatures and table with images , that  connected to animals table.
 2) Site made with Leptos that used data from mentioned database.
 3) It's all at the moment.
-
+4) I’ve started building the admin panel. Nothing special at the moment, first scratch
 I wiil to continue.

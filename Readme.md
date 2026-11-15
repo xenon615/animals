@@ -11,4 +11,4 @@ I leaved this public. May be it will be useful for somebody.
 2) Site made with Leptos that used data from mentioned database.
 3) It's all at the moment.
 4) I’ve started building the admin panel. Nothing special at the moment, first scratch
-I wiil to continue.
+I will to continue.

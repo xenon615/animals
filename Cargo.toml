@@ -31,7 +31,7 @@ argon2 = { version = "0.6.0", optional = true}
 leptos-struct-table = { version = "0.19.1" }
 # leptos-use = { version = "0.20.0" }
 leptos-use = { version = "0.19.3" }
-# form-forge = {path = "../form-forge", optional= true}
+form-forge = {path = "../form-forge", optional= true}
 
 
 [features]
@@ -39,7 +39,7 @@ hydrate = [
     "leptos/hydrate",
     "dep:console_error_panic_hook",
     "dep:wasm-bindgen",
-    # "dep:form-forge"
+    "dep:form-forge"
 ]
 ssr = [
     "dep:axum",

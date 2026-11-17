@@ -2,6 +2,7 @@ pub mod dashboard;
 pub mod users;
 pub mod creatures;
 pub mod dummy;
+pub mod test;
 use leptos::prelude::*;
 
 #[derive(Debug, serde::Serialize, serde::Deserialize)]
@@ -42,6 +43,10 @@ pub fn get_list() -> Vec<Entity> {
         Entity {
             label: "Dummy".to_string(),
             slug: "dummy".to_string(),
+        },
+        Entity {
+            label: "Test".to_string(),
+            slug: "test".to_string(),
         },
     ]
 }

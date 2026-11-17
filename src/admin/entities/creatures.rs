@@ -75,7 +75,6 @@ pub fn FormModal() -> impl IntoView {
         move || id.get(),
         |id_opt| async move {
             match id_opt {
-                // Some(id) => Some(get_single(id).await),
                 Some(id) => Some(get_form_data(id).await),
                 None => None,
             }
@@ -132,9 +131,7 @@ fn FormInner(fd: FormData) -> impl IntoView {
                 <ActionForm action = submit>
                     <fieldset>
                         <legend>Creature</legend>
-                        <label>"Id"
-                            <input type="hidden" name="creature[id]" value=fd.creature.id/>
-                        </label>
+                        <input type="hidden" name="creature[id]" value=fd.creature.id/>
                         <label>"Name"
                             <input type="text" name="creature[name]" value=fd.creature.name/>
                         </label>
@@ -158,11 +155,38 @@ fn FormInner(fd: FormData) -> impl IntoView {
                         <label>"Slug"
                             <input type="text" name = "creature[slug]" value=fd.creature.slug/>
                         </label>
+
+                            <Gallery gallery=fd.gallery/ >
+
+
                     </fieldset>
                     <input type="submit"/>
                 </ActionForm>
                 {err_message()}
             </pre>
+        </div>
+    }
+}
+
+// ---
+
+#[island]
+fn Gallery(gallery: Vec<(i32, String)>) -> impl IntoView {
+    view!{
+
+        <div>
+            <label>Gallery</label>
+            {
+                gallery.into_iter().map(|i| {
+                    let new_url = format!("/media/images/{}",&i.1[2..]);
+                    view! {
+                        <div>
+                            <img src=new_url height=64 />
+                        </div>
+                    }
+                })
+                .collect_view()
+            }
         </div>
     }
 }
@@ -192,29 +216,18 @@ pub struct Creature {
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 struct FormData {
     creature: Creature,
-    genuses: Vec<(String, String)>
+    genuses: Vec<(String, String)>,
+    gallery: Vec<(i32, String)>,
 }
+
+
 
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 struct QueryParams {
     range: Range<usize>
 }
 
-// #[server]
-// async fn get_list(params: QueryParams) -> Result<Vec<CreatureForList>, ServerFnError> {
-//     let pool = use_context::<sqlx::PgPool>().unwrap();
-//     let result = sqlx::query_as!(
-//         CreatureForList, r#"
-//         select c.id, c.name , c.scientific_name, t.name "genus_name", c.slug
-//         from creature c
-//         join taxonomy t on c.genus_id = t.id,
-//         order by 1 limit $1 offset $2 "#, params.range.len() as i64, params.range.start as i64
-//     )
-//         .fetch_all(&pool)
-//         .await
-//         ;
-//     result.map_err(|e| ServerFnError::new(e.to_string()))
-// }
+// ---
 
 #[server]
 async fn get_list(params: QueryParams) -> Result<Vec<CreatureForList>, ServerFnError> {
@@ -240,11 +253,7 @@ async fn get_list(params: QueryParams) -> Result<Vec<CreatureForList>, ServerFnE
         ?
         ;
 
-    Ok(
-        // result.into_iter().map(| mut c | {c.image = Some("1".to_string()); c} ).collect::<Vec<CreatureForList>>()
-        result
-    )
-
+    Ok(result)
 }
 
 // ---
@@ -274,18 +283,18 @@ fn ImageTableCellRenderer(
 
 // ---
 
-#[server]
-async fn get_single(id: i32) -> Result<Creature, ServerFnError> {
-    let pool = use_context::<sqlx::PgPool>().unwrap();
-    let result = sqlx::query_as!(
-        Creature, "
-        select c.id, c.name , c.scientific_name, c.genus_id, c.slug
-        from creature c where id = $1", id)
-        .fetch_one(&pool)
-        .await
-        ;
-    result.map_err(|e| ServerFnError::new(e.to_string()))
-}
+// #[server]
+// async fn get_single(id: i32) -> Result<Creature, ServerFnError> {
+//     let pool = use_context::<sqlx::PgPool>().unwrap();
+//     let result = sqlx::query_as!(
+//         Creature, "
+//         select c.id, c.name , c.scientific_name, c.genus_id, c.slug
+//         from creature c where id = $1", id)
+//         .fetch_one(&pool)
+//         .await
+//         ;
+//     result.map_err(|e| ServerFnError::new(e.to_string()))
+// }
 
 #[server]
 async fn get_form_data(id: i32) -> Result<FormData, ServerFnError> {
@@ -308,9 +317,23 @@ async fn get_form_data(id: i32) -> Result<FormData, ServerFnError> {
         ?
         ;
     let genuses:Vec<(String, String)> = genuses.into_iter().map(|r| (r.id.to_string() , r.name)).collect();
-    Ok(FormData { creature, genuses})
-}
 
+    let gallery = sqlx::query!(
+        r#"
+        select i.id, i.image "image!"
+        from creature_images ci
+        join image i on i.id = ci.image_id
+        where creature_id = $1"#, id)
+        .fetch_all(&pool)
+        .await
+        .map_err(|e| ServerFnError::new(e.to_string()))
+        ?
+        ;
+
+        let gallery:Vec<(i32, String)> = gallery.into_iter().map(|r| (r.id , r.image)).collect();
+
+    Ok(FormData { creature, genuses, gallery})
+}
 
 // ---
 
